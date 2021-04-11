@@ -89,3 +89,5 @@ Al ejecutar un programa de Node:
 
 Nota: En la Queue Callbacks se ejecutaran los procesos segun vayan llegando (FIFO)
 
+### Javascript ES6 (Reforzamiento)
+
