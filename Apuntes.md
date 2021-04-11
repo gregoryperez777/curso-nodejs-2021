@@ -91,3 +91,90 @@ Nota: En la Queue Callbacks se ejecutaran los procesos segun vayan llegando (FIF
 
 ### Javascript ES6 (Reforzamiento)
 
+####Variables y Scopes
+
+- Var: Crea variables de scope global
+
+<pre>
+#Ejemplo 1 Al reemplazar el valor de la variable en cualquier scope ella adquirirá ese nuevo valor 
+
+var nombre = 'Wolverine';
+
+if (true) {
+    nombre = 'Ironman';
+}
+
+console.log('nombre', nombre)
+// Esto imprimiria Ironman
+</pre>
+
+<pre>
+#Ejemplo 2 En este caso queremos cambiar el valor de la variable nombre solo dentro del scope de la sentencia if para ello declaramos una nueva variable con el mismo nombre
+ 
+var nombre = 'Wolverine';
+
+if (true) {
+    var nombre = 'Ironman';
+}
+
+console.log('nombre', nombre)
+// Esto imprimiria Ironman
+
+Como puedes observar se cambia de forma global nuevamente.
+</pre>
+
+
+- Let: Crea variables de scope local al bloque, declaración, o expresión donde se está usando
+
+<pre>
+#Ejemplo 1 En este caso queremos cambiar el valor de la variable nombre solo dentro del scope de la sentencia if para ello declaramos una nueva variable con el mismo nombre usando let
+ 
+let nombre = 'Wolverine';
+
+if (true) {
+    let nombre = 'Ironman';
+    console.log('nombre', nombre)
+}
+
+console.log('nombre', nombre)
+// Esto imprimiria Wolverine
+
+Como puedes observar la variable nombre dentro sentencia if toma como valor 'Ironman' y al finalizar su scope la variable nombre ya no existe pero si existe la variable nombre que fue declarada antes de la sentencia if
+</pre>
+
+<pre>
+#Ejemplo 2 En este caso queremos reemplazar el valor de la variable nombre en el scope de la sentencia if note que estamos usando la variable que hemos declarado antes de la sentencia if
+ 
+let nombre = 'Wolverine';
+
+if (true) {
+    nombre = 'Ironman';
+}
+
+console.log('nombre', nombre)
+// Esto imprimiria Ironman
+
+Como puedes observar en este caso javascript nota que quiere reemplazar el valor de la variable nombre sin embargo esa variable no existe en el scope de la sentencia if asi que va al scope superior para ver si la encuentra y asi reasignar su valor.
+</pre>
+
+- Const: Al igual que let crea variables de scope local al bloque, declaración, o expresión donde se está usando con la diferencia que no puedes redefinir su valor ya que sera constante durante la ejecusion del codigo.
+
+<pre>
+#Ejemplo 1 En este caso queremos reemplazar el valor de la variable nombre en el scope de la sentencia if note que hemos nombre como const
+ 
+const nombre = 'Wolverine';
+
+if (true) {
+    nombre = 'Ironman';
+}
+
+console.log('nombre', nombre)
+// Esto imprimiria Ironman
+
+Como puedes observar en este caso obtendras un error ya que no puedes reemplazar el valor de una variable que ha sido declarada como constante
+
+Nota: las variables decladas con const son mas ligeras que las declaradas con let ya que no poseen setter asi que se recomienda que siempre que se pueda utilicemos const para variables para mejorar el rendimiento del codigo.
+</pre>
+
+
+
