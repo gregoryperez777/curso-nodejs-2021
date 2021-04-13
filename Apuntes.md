@@ -397,3 +397,54 @@ Desestructurando objetos anidados
     const { infoComic: { fechaEstreno: releaseDate, director: manager } } = deadpool;
 </pre>
 
+
+#### Function Arrow:
+
+De este tema debo investigar mas
+
+
+#### Callback:
+
+Son funciones que se pasan como argumento a otra función donde posteriormente son invocadas.
+
+<pre>
+
+    #Ejemplo 1
+
+    const getUserByID = (id, callback) => {
+        
+        const user = {
+            id,
+            nombre: 'Carmen'
+        }
+        
+        setTimeout(() => {
+            callback(user)
+        }, 1500);
+    }
+
+    getUserByID(id, (user) => {
+        console.log(user);
+    });
+
+    #Ejemplo 2
+    const getUserByID = (id, callback) => {
+        
+        const user = {
+            id,
+            nombre: 'Carmen'
+        }
+        
+        setTimeout(() => {
+            callback(user)
+        }, 1500);
+    }
+
+    const showUser = (user) => {
+        console.log(user);
+    } 
+
+    getUserByID(id, showUser);
+</pre>
+
+
