@@ -397,6 +397,45 @@ Desestructurando objetos anidados
     const { infoComic: { fechaEstreno: releaseDate, director: manager } } = deadpool;
 </pre>
 
+#### operador de encadenamiento opcional ó Null Check Operator ?. :
+
+Permite leer el valor de una propiedad ubicada dentro de un objeto si ésta no es null o undefined. 
+Funciona de forma similar al operador ***.*** excepto que en lugar de causar un error si la referencia 
+es ***null*** ó ***undefined*** el operador hace una evaluacion de circuito corto y retorna undefined.
+
+<pre>
+    #Ejemplo 1
+
+    /*
+        En muchas ocasiones debemos hacer validaciones de este tipo
+    */
+
+    if (obj.first && obj.first.second) {
+        // hacer algo
+    }
+
+    /*
+        Ahora con este nuevo operador podemos hacer lo siguiente
+    */
+
+    if (obj.first?.second) {
+        // hacer algo
+    }
+
+</pre>
+
+Como viste en el ejemplo anterior no es necesario comprobar el estado o valor de obj.first primero 
+ya que Javascript verifica implicitamente que obj.first no sea null o undefined antes de tratar de 
+acceder a second.
+
+<pre>
+    Puede usarse de las siguientes maneras:
+        
+        obj.val?.prop
+        obj.val?.[expr]
+        obj.arr?.[index]
+        obj.func?.(args)
+</pre>
 
 #### Function Arrow:
 
@@ -447,4 +486,227 @@ Son funciones que se pasan como argumento a otra función donde posteriormente s
     getUserByID(id, showUser);
 </pre>
 
+En el ejemplo de arriba existe un problema y es no tiene una forma de diferenciar entre un error y una respuesta 
+correcta para ello al momento de retornar el callback el primer parametro se le pasaria null para decir 
+que no hubo errores o un msj de error como primer parametro
+
+<pre>
+    #Ejemplo 1
+
+    const getEmpleado = (id, callback) => {
+    const empleado = empleados.find(e => e.id === id)?.nombre;
+
+    if (empleado) {
+        // NULL significa que no hay ningun error
+        callback(null, empleado)
+    } else {
+        callback(`Empleado con ${id} no existe`);
+    }
+}
+</pre>
+
+#### Callback Hell:
+
+El callback hell es un problema comun que ocurre cuando dentro de un callback hacemos o llamamos a mas callback esto 
+hace que nuestro codigo sea poco entendible y mantenible con el tiempo
+
+<pre>
+    #Ejemplo pequeño ejemplo de un callback dentro de otro
+
+    const id = 3;
+
+    getEmpleado(id, (err, empleado) => {
+        if (err) {
+            return console.log(err)
+        }
+        
+        console.log('Nombre del empleado:', empleado);
+
+        getSalario(id, (err, salario) => {
+            if (err) {
+                return console.log(err);
+            }
+
+            console.log(`El empleado ${empleado} tiene un salario de: ${salario}`)
+        });
+    });
+</pre>
+
+#### Promise:
+
+Una promesa es un objeto que representa la terminación exitosa o el fracaso de una operación 
+asincrona. La misma recibe 2 parametros (resolve y reject) utilizado para resolver o rechazar la promesa segun sea el caso.
+
+Sintaxys:
+
+<pre>
+new Promise((resolve, reject) => {
+    if (success) {
+        resolve()
+    } else {
+        reject()
+    }
+})
+</pre>
+
+Una Promesa puede encontrarse en uno de los siguientes estados:
+
+- pendiente (pending): estado inicial, no cumplida o rechazada.
+- cumplida (fulfilled): significa que la operación se completó satisfactoriamente.
+- rechazada (rejected): significa que la operación falló.
+
+#### Promise Hell:
+
+Utilizando promesas tambien podemos hacer un HELL. Lo cual es una mala practica, para ello 
+podemos encadenar promesas.  
+
+<pre>
+
+const getEmpleado = (id) => {
+    return new Promise((resolve, reject) => {
+        const empleado = empleados.find(e => e.id === id)?.nombre;
+        ( empleado ) 
+            ? resolve(empleado) 
+            : reject(`No existe empleado con id: ${id}`);
+    });
+}
+
+getEmpleado(id)
+    .then(empleado => {
+        getSalario(id)
+            .then(salario => {
+                console.log('El empleador', empleado, 'tiene un sueldo de: ', salario);
+            })
+            .catch(err => {
+                console.log(err);
+            })
+    })
+    .catch(err => {
+        console.log(err);
+    })
+</pre>
+
+#### Promise en cadena:
+
+Seguramente en algunas oportunidades vas a necesitar ejecutar una promesa tras otra y como probocar un promise hell es mala practica la solucion es encadenar promesas.
+
+Utilicemos el ejemplo anterior pero ahora como promesas encadenada
+
+<pre>
+
+const getEmpleado = (id) => {
+    return new Promise((resolve, reject) => {
+        const empleado = empleados.find(e => e.id === id)?.nombre;
+        ( empleado ) 
+            ? resolve(empleado) 
+            : reject(`No existe empleado con id: ${id}`);
+    });
+}
+
+getEmpleado(id)
+    .then(empleado => {
+        nombre = empleado;
+        return getSalario(id);
+    })
+    .then(salario => console.log(`El empleado ${nombre} tiene un salario de: ${salario}`))
+    .catch(err => console.log(err));
+</pre>
+
+Como puedes observar cada .then() recibe lo que la promesa anterior retornar si existe algun error .catch(err) se encargara de manejarlo  
+
+#### Async y Await:
+
+Async y Await son palabras reservadas muy utilizadas cuando trabajamos con promesas.
+
+Async es utilizada para definir una funcion como asincrona cuyo valor de respuesta sera una promesa.
+
+Await por su lado es utilizado para decirle a Javascript que debe esperar que se ejecute la promesa para seguir ejecutando las siguientes lineas de codigo.
+
+Lo mas importante que debes conocer de estos elementos es que para usar await debemos estar entro de una funcion Async.
+
+<pre>
+const empleados = [
+    {
+        id: 1,
+        nombre: 'Fernando',
+    },
+    {
+        id: 2,
+        nombre: 'Linda',
+    },
+    {
+        id: 3,
+        nombre: 'Karen',
+    }
+];
+
+const salarios = [
+    {
+        id: 1,
+        salario: 1000,
+    },
+    {
+        id: 2,
+        salario: 1500,
+    },
+    {
+        id: 3,
+    }
+];
+
+const getEmpleado = (id) => {
+    return new Promise((resolve, reject) => {
+        const empleado = empleados.find(e => e.id === id)?.nombre;
+        ( empleado ) 
+            ? resolve(empleado) 
+            : reject(`No existe empleado con id: ${id}`);
+    });
+}
+
+const getSalario = (id) => {
+    return new Promise((resolve, reject) => {
+        const salario = salarios.find(e => e.id === id)?.salario;
+        
+        // If ternario
+        ( salario ) 
+            ? resolve(salario) 
+            : reject(`No existe salario para usuario con id: ${id}`);
+    })
+};
+
+/*
+    Recuerda que Async transforma mi funcion en una funcion asincrona que 
+    retorna una promesa
+*/
+const getInfoUsuario = async (id) => {
+    try {
+        const empleado = await getEmpleado(id);
+        const salarios = await getSalario(id);
+        return (`El empleado ${empleado} tiene un salario de: ${salarios}`);
+    } catch (err) {
+        // Si colocamos return es como si salieramos de forma correcta
+        // de la promesa a pesar de tener errores 
+        // es decir cuando hagan getInfoUsuario.then() <--- entrara por ahi y no por el catch 
+        return err;
+        
+        // si colocamos throw salimos de la funcion de forma incorrecta 
+        // es decir cuando hagan getInfoUsuario.then().catch(err) <--- entrara por el catch 
+        throw(err);
+
+        // throw es el reject de async
+    }
+}
+
+
+const id = 10;
+getInfoUsuario(id)
+    .then(msg => {
+        console.log('THEN');
+        console.log(msg)
+    })
+    .catch(err => {
+        console.log('CATCH');
+        console.log(err)
+    });
+</pre>
 
