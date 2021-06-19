@@ -710,3 +710,114 @@ getInfoUsuario(id)
     });
 </pre>
 
+### Fundamentos de Node
+
+#### Sistemas de gestión de paquetes 
+
+-   NPM
+-   YARN
+
+#### Comandos Basicos NPM 
+
+- npm init: inicializa el proyecto a construir creando un archivo package.json donde posteriormente se alojaran las dependencias y dev dependencias del proyecto
+
+    - **Dependencias**: son aquellas librerias que usaras tanto en el ambiente de produccion como en el de desarrollo.
+
+    - **DevDependencias**: son aquellas librerias que usaras solamente en el ambiente de desarrollo como por ejemplo Nodemond
+
+    ### Inicializando proyecto:
+
+    Puedes ejecutar este comando de esta manera. Acto seguido te pedira informacion que debes completar para crear el package.json
+
+    <pre>
+        npm init
+    </pre>
+
+    Tambien puedes ejecutarlo de esta manera. De esta forma se creara un package.json con informacion por default que luego podras cambiar.
+    <pre>
+        npm init -y
+    </pre>
+
+    ### Package-lock.json
+    
+    Indica como fueron construidas las dependencias o como se deben construir las dependencias que estan en el 
+    en el proyecto
+
+    ### Instalando paquetes: 
+
+    Los paquetes, librerias o dependencias estan alojadas en npm para verificar si un determinado paquete se encuentran disponible puedes buscarlo en [NPM](https://www.npmjs.com/) 
+
+    Esta es la forma mas comun de instalar una dependencia    
+    <pre>
+        npm install nombredelpackete
+    </pre>
+
+    Tambien existe esta opcion para realizar la instalacion de un paquete 
+    <pre>
+        npm i nombreDelPaquete
+    </pre>
+
+    En ocasiones puedes encontrarte con problemas de compatibilidad entre las versiones de un paquete. Seguramente tu proyecto trabaje bien para una version de un paquete pero para otra no.
+
+    En ese caso si queremos instalar un paquete en una version especifica podemos hacer lo siguiente
+
+    <pre>
+        npm install nombreDelPaquete@versionDelPaquete
+        npm i nombreDelPaquete@versionDelPaquete
+    </pre>
+
+    ### Dependencia ó DevDependencia:
+    
+    NPM proporciona 2 banderas para indicar si el paquete que se va a instalar es una dependencia o devDependencia.
+
+    [--save, -S] indica que el paquete es una dependencia (El paquete sera usado tanto en ambiente de desarrollo como en producción)
+
+    [--save-dev, -D] indica que el paquete es una DevDependencia (El paquete sera usado solo en ambiente de desarrollo)
+
+    Nota: por default si no se indica una bandera el paquete se tomara como una devDependencia. 
+
+    #### Indicando que se instalara una dependencia
+    <pre>
+        npm install nombreDelPaquete --save
+        npm i nombreDelPaquete -S
+    </pre> 
+
+    #### Indicando que se instalara una DevDependencia
+    <pre>
+        npm install nombreDelPaquete --save-dev
+        npm i nombreDelPaquete -D
+    </pre>     
+
+    ### Desinstalar paquetes:
+
+    #### Desinstala de la dependencias 
+    <pre>
+        npm uninstall nombreDelPaquete
+    </pre> 
+
+#### Manejando argumento pasado desde la terminal:
+    process.argv: es un array que contiene los comandos pasados cuando se inicia la aplicacion de Node. Los primeros 2 elemento del array son los siguientes: 
+
+        - [0]: Donde esta instalado node
+        - [1]: Donde esta corriendo la aplicacion
+   
+    Example
+    
+    Al ejecutar una aplicacion de la siguiente manera
+
+        node app --base=4
+
+    tendriamos lo siguiente en process.argv
+
+    [
+        '/home/gregory/.nvm/versions/node/v12.13.0/bin/node', -----> donde esta instalado node
+        '/home/gregory/proyect/curso-nodejs-2021/03-bases-node/app.js', -----> donde esta corriendo la aplicacion
+        '--base=4'
+    ]
+
+    y a partir de alli podemos tomar valores para realizar alguna accion. Sin embargo al utilizar process.argv para recibir argumento existen muchos lugares donde puede falla pueden enviar varios argumentos en orden diferentes y eso quebraria el codigo en fin no es recomendable utilizarlo para este tipo de trabajo
+
+    Una forma de tomar el argument en la posicion 2 del array seria la siguiente 
+    
+    const [ , , argv3 = 'base=5'] = process.argv;
+    const [ , base ] = argv3.split('='); 
