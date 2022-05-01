@@ -38,7 +38,8 @@ const UsuarioSchema = Schema({
 // toJSON el cual se llama al momento de utilizar el 
 // modelo e imprimirlo como como un objeto o string
 UsuarioSchema.methods.toJSON = function() {
-    const { __v, password, ...usuario } = this.toObject();
+    const { __v, password, _id, ...usuario } = this.toObject();
+    usuario.uid = _id;
     return usuario
 }
 
