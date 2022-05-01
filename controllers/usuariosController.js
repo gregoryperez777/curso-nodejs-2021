@@ -96,11 +96,10 @@ const usuariosGet = async (req, res = response) => {
 
 const usuariosDelete = async (req, res = response) => {
     const { id } = req.params
-    
     // Borrado Fisicamente
     // const usuario = await Usuario.findByIdAndDelete(id);
 
-    const usuario = await Usuario.findByIdAndUpdate(id, {estado: false});
+    const usuario = await Usuario.findByIdAndUpdate(id, {estado: false}, {new: true});
 
     res.json(usuario);
 }
