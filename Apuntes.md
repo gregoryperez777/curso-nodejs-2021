@@ -820,4 +820,114 @@ getInfoUsuario(id)
     Una forma de tomar el argument en la posicion 2 del array seria la siguiente 
     
     const [ , , argv3 = 'base=5'] = process.argv;
-    const [ , base ] = argv3.split('='); 
+    const [ , base ] = argv3.split('='); +
+
+#### Deploy en heroku
+
+1) crear una cuenta en heroku
+
+2) hacer login e ir a https://dashboard.heroku.com/new-app vamos a esta url al darle al boton new del dashboard
+
+3) seleccionamos el nombre de la aplicacion (son nombres compartidos asi que debes buscar uno disponible)
+
+4) pulsamos create app
+
+5) Instala Heroku CLI para la terminal (https://devcenter.heroku.com/articles/heroku-cli) en mi caso creo que utilice esto 
+curl https://cli-assets.heroku.com/install-ubuntu.sh | sh
+
+6) Loguearnos por la terminal con heroku login
+
+7) Crea un nuevo repositorio de Git e Inicializar un repositorio de git en un directorio nuevo o existente
+
+cd mi-proyecto /
+git init
+heroku git: remoto -a nombre-de-la-app que escribimos en el paso 3
+
+8) Implementa tu aplicación Envíe su código al repositorio e impleméntelo en Heroku usando Git.
+
+git add .
+git commit -am "hacerlo mejor"
+git push heroku master
+
+9) Repositorio de Git existente Para repositorios existentes, simplemente agregue el heroku control remoto
+
+heroku git: remoto -a nombre-de-la-app que escribimos en el paso 3
+
+##### Creando variables de entorno en heroku 
+
+En nuestro proyecto local tenemos un archivo llamado .env que contiene las keys y password de herramientas utilizadas en el proyecto.
+cabe resaltar que los valores dentro de este archivo .env son accesible desde process.env por ende el mismo sera utilizado solo de manera local y no debe ser subido al momento de desplegar para evitar fallas de seguridad. Ahora bien para crear estas variables de entorno accesibles desde proccess.env sin el archivo .env y que el proyecto funcione al hacer deploy debemos crearlas a traves del heroku CLI.
+
+Heroku te permite desde la terminal de linux ejecutar mas funcionalidades puedes visualizarla te invito a ejecutar el siguiente comando
+
+heroku help
+
+obteniendo como resultado esto:
+
+COMMANDS
+  access          manage user access to apps
+  addons          tools and services for developing, extending, and operating your app
+  apps            manage apps on Heroku
+  auth            check 2fa status
+  authorizations  OAuth authorizations
+  autocomplete    display autocomplete installation instructions
+  base
+  buildpacks      scripts used to compile apps
+  certs           a topic for the ssl plugin
+  ci              run an application test suite on Heroku
+  clients         OAuth clients on the platform
+  config          environment variables of apps
+  container       Use containers to build and deploy Heroku apps
+  domains         custom domains for apps
+  drains          forward logs to syslog or HTTPS
+  features        add/remove app features
+  git             manage local git repository for app
+  help            display help for heroku
+  keys            add/remove account ssh keys
+  labs            add/remove experimental features
+  local           run Heroku app locally
+  logs            display recent log output
+  maintenance     enable/disable access to app
+  members         manage organization members
+  notifications   display notifications
+  orgs            manage organizations
+  pg              manage postgresql databases
+  pipelines       manage pipelines
+  plugins         list installed plugins
+  ps              Client tools for Heroku Exec
+  psql            open a psql shell to the database
+  redis           manage heroku redis instances
+  regions         list available regions for deployment
+  releases        display the releases for an app
+  reviewapps      manage reviewapps in pipelines
+  run             run a one-off process inside a Heroku dyno
+  sessions        OAuth sessions
+  spaces          manage heroku private spaces
+  status          status of the Heroku platform
+  teams           manage teams
+  update          update the Heroku CLI
+  webhooks        list webhooks on an app
+
+Para configurar las variable de entorno de nuestro proyecto en heroku, sigue los sigientes pasos:
+
+Inicia tu logeo de tu cuenta y ingresa tus credenciales con
+
+1) heroku login
+
+2) Te ubicas sobre tu proyecto o te clonas si no lo tienes
+cd <Tu Proyecto> ó heroku git clone https://git.heroku.com/<Tu Proyecto>.git && cd <Tu Proyecto>
+
+3) ya listo para la configuracion de las variables de entorno
+
+heroku config:set DB_HOST='escribe-tu-host' 
+heroku config:set DB_USER='escribe-tu-user' 
+heroku config:set DB_PASS='escribe-tu-pass' 
+heroku config:set DB_NAME='escribe-tu-name' 
+heroku config:set DB_CHARSET='escribe-tu-charset'
+
+4) para ver los valores asignado a las variable solo con heroku config:get DB_HOST
+
+5) Adicional a esto si quieres ver todas las variables que tienes configuradas lo puedes ver con heroku run printenv
+
+6) con heroku run tu puedes ejecutar cualquier comando en el alojamiento de heroku y capturando la salida en tu terminal muy util para cualquier necesidad.
+
