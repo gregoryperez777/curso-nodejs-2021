@@ -12,7 +12,7 @@ const login = async (req, res = response) => {
 
     try {
         // verificar si el usuarios existe
-        const usuario = await Usuarios.findOne({ correo });
+        const usuario = await Usuario.findOne({ correo });
 
         console.log('usuario', usuario);
 
