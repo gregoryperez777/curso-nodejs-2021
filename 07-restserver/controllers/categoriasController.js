@@ -6,7 +6,7 @@ const obtenerCategorias = async (req, res = response) => {
     try {
         const { limite = 5, desde = 0 } = req.query;
         const query = { estado: true };
-    
+
         /*
         *   populate es un metodo utilizado para traernos data
         *   que estan relacionadas entre collections
@@ -38,11 +38,11 @@ const obtenerCategorias = async (req, res = response) => {
                 .skip(Number(desde))
                 .limit(Number(limite))
                 .populate('usuario', 'nombre')
-               
+
         ]);
-    
+
         res.status(200).json({
-            total, 
+            total,
             categorias
         });
     } catch (error) {
@@ -55,7 +55,7 @@ const obtenerCategoria = async (req, res = response) => {
     try {
         const { id } = req.params;
         const categoria = await Categoria.findById(id).populate('usuario', 'nombre');
-    
+
         res.status(200).json({
             categoria
         });
@@ -66,7 +66,7 @@ const obtenerCategoria = async (req, res = response) => {
 
 const crearCategorias = async (req, res = response) => {
     const nombre = req.body.nombre.toUpperCase();
-    
+
     const { precio, description, disponible } = req.body;
 
     const categoriaDB = await Categoria.findOne({ nombre })
@@ -78,7 +78,7 @@ const crearCategorias = async (req, res = response) => {
     }
 
     const data = {
-        nombre, 
+        nombre,
         precio,
         description,
         disponible,
@@ -86,7 +86,7 @@ const crearCategorias = async (req, res = response) => {
     }
 
     const categoria = new Categoria(data);
-    
+
     await categoria.save();
 
     res.status(201).json(categoria);
@@ -95,7 +95,7 @@ const crearCategorias = async (req, res = response) => {
 const actualizarCategoria = async (req, res = response) => {
     const { id } = req.params;
     const { estado, usuario, ...data } = req.body;
-    
+
     data.nombre = data.nombre.toUpperCase();
     data.usuario = req.usuario._id;
 
@@ -116,6 +116,6 @@ module.exports = {
     obtenerCategorias,
     obtenerCategoria,
     crearCategorias,
-    actualizarCategoria, 
+    actualizarCategoria,
     borrarCategoria
 }
